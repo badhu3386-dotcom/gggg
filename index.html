@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign to Voice</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🤟 Sign to Voice</h1>
+    <p>Show a sign (one or two hands) to your webcam. It appears as text and is spoken aloud.</p>
+  </header>
+
+  <main>
+    <section class="card video-card">
+      <div class="video-wrap">
+        <video id="video" playsinline muted></video>
+        <canvas id="overlay" width="640" height="480"></canvas>
+        <div id="status" class="status">Click "Start camera" to begin</div>
+      </div>
+      <div class="row">
+        <button id="startBtn" class="primary">Start camera</button>
+        <span id="liveLabel" class="live">Detected: <b>–</b></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Translation</h2>
+      <div id="sentence" class="sentence">(nothing yet)</div>
+      <div class="row">
+        <button id="speakBtn" class="primary">🔊 Speak</button>
+        <button id="undoBtn">⌫ Remove last</button>
+        <button id="clearBtn">Clear</button>
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="autoSpeak" checked /> Speak each word automatically</label>
+      </div>
+      <div class="row">
+        <label>Voice language
+          <select id="langSelect">
+            <option value="en-IN">English (India)</option>
+            <option value="en-US">English (US)</option>
+            <option value="hi-IN">Hindi</option>
+            <option value="ml-IN">Malayalam</option>
+            <option value="ta-IN">Tamil</option>
+            <option value="te-IN">Telugu</option>
+            <option value="kn-IN">Kannada</option>
+            <option value="bn-IN">Bengali</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label>Hold time (frames)
+          <input type="range" id="holdRange" min="5" max="40" value="15" />
+          <span id="holdVal">15</span>
+        </label>
+      </div>
+      <div class="row">
+        <label>Strictness
+          <input type="range" id="strictRange" min="2" max="30" value="12" />
+          <span id="strictVal">1.2</span>
+        </label>
+      </div>
+      <p class="hint">Hold time: how long a sign must be held before it counts. Strictness: lower = only very close matches are accepted.</p>
+    </section>
+
+    <section class="card">
+      <h2>Guided setup</h2>
+      <p class="hint">Let the app walk you through a list of signs one by one. For each, make the correct ISL sign (check an ISL dictionary such as the ISLRTC one first), press Record, and hold the pose steadily. When you finish, press <b>Export signs</b> to download your own import file.</p>
+      <div class="row">
+        <select id="packSelect">
+          <option value="mywords">Hello, Thank you, Love you, Help, Welcome (5)</option>
+          <option value="words">Common words (10)</option>
+          <option value="numbers">Numbers 1-10</option>
+          <option value="letters">Letters A-Z</option>
+        </select>
+        <button id="guidedStart" class="primary">Start guided setup</button>
+      </div>
+      <div id="guidedBox" class="guided hidden">
+        <div id="guidedCount" class="hint"></div>
+        <div id="guidedSign" class="guided-sign"></div>
+        <div class="row">
+          <button id="guidedBack">← Back</button>
+          <button id="guidedRecord" class="primary">⏺ Record (3 sec countdown)</button>
+          <button id="guidedSkip">Skip →</button>
+          <button id="guidedStop">Stop</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Teach a sign</h2>
+      <p class="hint">Type the word this sign means, make the sign, then press Record. Record a few times with slightly different hand positions for better accuracy.</p>
+      <div class="row">
+        <input type="text" id="labelInput" placeholder="e.g. Hello, Thank you, A" />
+        <button id="recordBtn" class="primary">⏺ Record (2 sec)</button>
+      </div>
+      <div id="recordProgress" class="progress hidden"><div></div></div>
+
+      <h3>Saved signs</h3>
+      <div id="signList" class="sign-list"></div>
+
+      <div class="row">
+        <button id="exportBtn">Export signs (.json)</button>
+        <button id="importBtn">Import signs</button>
+        <button id="wipeBtn" class="danger">Delete all</button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Built with MediaPipe Hands + Web Speech API. Everything runs in your browser; no video is uploaded.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1675466124/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+</body>
+</html>
